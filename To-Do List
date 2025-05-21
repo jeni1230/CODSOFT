@@ -1,0 +1,84 @@
+# 🧠 Friendly To-Do List Buddy - Command Line Version
+import os
+
+# Each task is a dictionary with description and status
+todo_list = []
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def show_menu():
+    print("\n👋 Hey there! What would you like to do today?")
+    print("1️⃣  View my to-do list")
+    print("2️⃣  Add something new")
+    print("3️⃣  Mark a task as done ✅")
+    print("4️⃣  Remove a task 🗑️")
+    print("5️⃣  Exit (Bye for now!)")
+
+def view_tasks():
+    print("\n📋 Here's what you've got on your plate:")
+    if not todo_list:
+        print("✨ Nothing yet! Add a task and let’s get started.")
+    else:
+        for i, task in enumerate(todo_list):
+            status = "✅ Done" if task['completed'] else "❌ Not yet"
+            print(f"{i+1}. {task['task']} [{status}]")
+
+def add_task():
+    task_desc = input("\n🆕 What do you need to do? ").strip()
+    if task_desc:
+        todo_list.append({'task': task_desc, 'completed': False})
+        print("👍 Got it! Task added to your list.")
+    else:
+        print("⚠️ Hmm... that looked empty. Try again with a task.")
+
+def complete_task():
+    view_tasks()
+    if not todo_list:
+        return
+    try:
+        task_no = int(input("\n✨ Which task number did you finish? "))
+        if 1 <= task_no <= len(todo_list):
+            todo_list[task_no - 1]['completed'] = True
+            print("🎉 Yay! That’s one task off your list!")
+        else:
+            print("❗ Oops! That number doesn’t match any task.")
+    except ValueError:
+        print("❗ Please enter a number, not letters.")
+
+def delete_task():
+    view_tasks()
+    if not todo_list:
+        return
+    try:
+        task_no = int(input("\n🗑️ Which task would you like to delete? "))
+        if 1 <= task_no <= len(todo_list):
+            removed = todo_list.pop(task_no - 1)
+            print(f"🧹 Cleaned up! Removed: '{removed['task']}'")
+        else:
+            print("❗ That number isn’t on your list.")
+    except ValueError:
+        print("❗ Please enter a valid task number.")
+
+# Main Program Loop
+while True:
+    show_menu()
+    choice = input("\n👉 Enter your choice (1-5): ")
+
+    if choice == '1':
+        clear_screen()
+        view_tasks()
+    elif choice == '2':
+        clear_screen()
+        add_task()
+    elif choice == '3':
+        clear_screen()
+        complete_task()
+    elif choice == '4':
+        clear_screen()
+        delete_task()
+    elif choice == '5':
+        print("\n👋 Take care! Hope you smash your goals today! 💪")
+        break
+    else:
+        print("🤔 Hmm... That’s not a valid option. Try 1, 2, 3, 4, or 5.")
